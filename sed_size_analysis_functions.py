@@ -1,6 +1,5 @@
 # sed_size_analysis_functions.py
 """Modules for sediment size analysis data processing"""
-
 import pandas as pd
 import numpy as np
 
@@ -10,16 +9,16 @@ class hydrometer_calcs:
     Takes hydrometer data and returns percent sand, silt, and clay.
     """
 
-    def __init__(self, path_to_data, path_to_config, path_to_colnames, path_to_calcset):
+    def __init__(self, path_to_data, path_to_params, path_to_colnames, path_to_calcset):
 
         self.path_to_data = path_to_data
-        self.path_to_config = path_to_config
+        self.path_to_params = path_to_params
         self.path_to_colnames = path_to_colnames
         self.path_to_calcset = path_to_calcset
 
         # Load data
         self.data = pd.read_csv(self.path_to_data)
-        self.config = pd.read_csv(self.path_to_config)
+        self.params = pd.read_csv(self.path_to_params)
         self.colnames = pd.read_csv(self.path_to_colnames)
         self.calcset = pd.read_csv(self.path_to_calcset)
 
@@ -32,7 +31,7 @@ class hydrometer_calcs:
 
         # Build parameter dictionary
         self.params = (
-            self.config
+            self.params
             .set_index("Parameter")["Value"]
             .to_dict()
         )
@@ -58,7 +57,7 @@ class hydrometer_calcs:
 
     def _validate_parameters(self):
         required = {"mu", "rho_l", "rho_s", "g", "L0", "k"}
-        available = set(self.config["Parameter"])
+        available = set(self.params["Parameter"])
 
         missing = required - available
         if missing:
@@ -159,7 +158,7 @@ class hydrometer_calcs:
         L0 = float(self.params["L0"])
         k = float(self.params["k"])
 
-        # Get times from colnames config file
+        # Get times from colnames colnames file
         R_cols = self.colnames['Variable'].dropna()
         R_cols = R_cols[R_cols.str.startswith('R_')]
         R_cols = R_cols[~R_cols.str.startswith('R_b')]
@@ -215,7 +214,7 @@ class hydrometer_calcs:
 if __name__ == "__main__":
 
     hc = hydrometer_calcs(path_to_data="C:/Users/josie/Downloads/sed_size_analysis_example/sedsizedata_sample_taylor.csv", 
-                          path_to_config= "C:/Users/josie/Downloads/sed_size_analysis_example/config_files/config.csv", 
+                          path_to_params= "C:/Users/josie/Downloads/sed_size_analysis_example/config_files/params.csv", 
                           path_to_colnames= "C:/Users/josie/Downloads/sed_size_analysis_example/config_files/colnames.csv", 
                           path_to_calcset="C:/Users/josie/Downloads/sed_size_analysis_example/config_files/calcset.csv")
 

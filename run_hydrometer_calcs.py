@@ -6,7 +6,7 @@ data_file_name = "sedsizedata_sample_taylor.csv"
 
 
 hc = hydrometer_calcs(path_to_data= directory + "/" + data_file_name, 
-                    path_to_config= directory + "/config_files/config.csv", 
+                    path_to_config= directory + "/config_files/params.csv", 
                     path_to_colnames= directory + "/config_files/colnames.csv", 
                     path_to_calcset= directory + "/config_files/calcset.csv")
 
