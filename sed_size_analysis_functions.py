@@ -159,7 +159,15 @@ class hydrometer_calcs:
         L0 = float(self.params["L0"])
         k = float(self.params["k"])
 
-        times = ["30", "60", "5400", "86400"]
+        # Get times from colnames config file
+        R_cols = self.colnames['Variable'].dropna()
+        R_cols = R_cols[R_cols.str.startswith('R_')]
+        R_cols = R_cols[~R_cols.str.startswith('R_b')]
+
+
+        # Extract times as the part after 'R_'
+        times = [c.split('_')[1] for c in R_cols]
+        print(times)
 
         # Prep lists for interpolation
         self.X_cols = [f"X_{t}" for t in times]
